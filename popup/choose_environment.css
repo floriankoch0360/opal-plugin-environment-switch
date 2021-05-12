@@ -1,0 +1,23 @@
+.button {
+  margin: 3% 3%;
+  padding: 4px;
+  text-align: center;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.environment:hover {
+  background-color: #3498db;
+}
+
+.environment {
+  background-color: #2980b9;
+}
+
+.environment-active {
+  background-color: #27ae60;	
+}
+
+.environment-active:hover {
+  background-color: #2ecc71;	
+}

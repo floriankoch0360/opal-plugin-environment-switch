@@ -4,6 +4,7 @@
   "version": "0.1",
   "description": "Adds helpful features to navigate between OPAL services and their different environments (dev-ci, develop, live).",
   "icons": {
+    "16": "icons/plugin_icon_colored_16.png",
     "48": "icons/plugin_icon_colored_48.png",
     "96": "icons/plugin_icon_colored_96.png"
   },

@@ -34,11 +34,13 @@ document.addEventListener("click", (e) => {
   }
 
   if (e.target.classList.contains("environment")) {
-    thisBrowser.tabs.query({ active: true, currentWindow: true })
-      .then(changeEnvironment, console.error);
+    thisBrowser.tabs.query({ active: true, currentWindow: true }, function(result) {
+      changeEnvironment(result);
+    });
   }
 
 });
 
-thisBrowser.tabs.query({ active: true, currentWindow: true })
-  .then(markCurrentEnvironment, console.error);
+thisBrowser.tabs.query({ active: true, currentWindow: true }, function(result) {
+  markCurrentEnvironment(result);
+});

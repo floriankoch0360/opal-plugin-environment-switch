@@ -53,19 +53,27 @@ const KNOWN_SERVICES = [
   "validation"
 ];
 
+
+
+let thisBrowser = null;
+if (typeof browser === 'undefined') {
+  thisBrowser = chrome;
+} else {
+  thisBrowser = browser;
+}
+
 // Provide help text to the user.
-browser.omnibox.setDefaultSuggestion({
+thisBrowser.omnibox.setDefaultSuggestion({
   description: `Open the corresponding opal service with the chosen environment (default live)
     (e.g. "inventory" | "archive develop")`
 });
 
 // Update the suggestions whenever the input is changed.
-browser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
+thisBrowser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
   let suggestions = [];
   let parts = text.split(' ');
   if (parts.length > 1) {
     let service = autocompleteService(parts[0]);
-    let environment = parts[1];
     ENVIRONMENTS.forEach(environment => {
       suggestions.push(createSuggestion(service, environment));
     });
@@ -86,7 +94,7 @@ browser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
 });
 
 // Open the page based on how the user clicks on a suggestion.
-browser.omnibox.onInputEntered.addListener((text, disposition) => {
+thisBrowser.omnibox.onInputEntered.addListener((text, disposition) => {
   let url = text;
   if (!text.startsWith(PROTOCOL)) {
     let parts = text.split(' ');
@@ -106,13 +114,13 @@ browser.omnibox.onInputEntered.addListener((text, disposition) => {
 
   switch (disposition) {
     case "currentTab":
-      browser.tabs.update({ url });
+      thisBrowser.tabs.update({ url });
       break;
     case "newForegroundTab":
-      browser.tabs.create({ url });
+      thisBrowser.tabs.create({ url });
       break;
     case "newBackgroundTab":
-      browser.tabs.create({ url, active: false });
+      thisBrowser.tabs.create({ url, active: false });
       break;
   }
 });
@@ -144,4 +152,29 @@ function createSuggestion(service, environment) {
     content: `${service} ${environment}`,
     description: `Open opal-${service} in the ${environment} environment`
   }
+}
+
+function escapeRegex(input) {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**********/
+/* CHROME */
+/**********/
+
+// Called when the url of a tab changes.
+function checkForValidUrl(tabId, changeInfo, tab) {
+  if (!tab.url) {
+    return;
+  }
+
+  let regex = escapeRegex(PROTOCOL) + ".+" + escapeRegex(BASE_URL) + ".+";
+  if (tab.url.match(regex)) {
+      chrome.pageAction.show(tabId);
+  }
+};
+
+if (typeof chrome !== 'undefined') {
+  // Listen for any changes to the URL of any tab.
+  chrome.tabs.onUpdated.addListener(checkForValidUrl);
 }

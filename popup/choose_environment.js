@@ -1,3 +1,10 @@
+let thisBrowser = null;
+if (typeof browser === 'undefined') {
+  thisBrowser = chrome;
+} else {
+  thisBrowser = browser;
+}
+
 function markCurrentEnvironment(tabs) {
   let currentUrl = tabs[0].url;
   let regex = /(?:https:\/\/[\w-_]+\.)([\w-_]+)(?:\.opal\.cloud\.otto\.de.*)/;
@@ -22,16 +29,16 @@ document.addEventListener("click", (e) => {
     let targetEnv = e.target.textContent.toLowerCase();
     let regex = /(https:\/\/[\w-_]+\.)(?:[\w-_]+)(\.opal\.cloud\.otto\.de.*)/;
     let url = currentUrl.replace(regex, "$1" + targetEnv + "$2");
-    browser.tabs.update({ url });
+    thisBrowser.tabs.update({ url });
     window.close();
   }
 
   if (e.target.classList.contains("environment")) {
-    browser.tabs.query({ active: true, currentWindow: true })
+    thisBrowser.tabs.query({ active: true, currentWindow: true })
       .then(changeEnvironment, console.error);
   }
 
 });
 
-browser.tabs.query({ active: true, currentWindow: true })
+thisBrowser.tabs.query({ active: true, currentWindow: true })
   .then(markCurrentEnvironment, console.error);

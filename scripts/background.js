@@ -55,21 +55,14 @@ const KNOWN_SERVICES = [
 
 
 
-let thisBrowser = null;
-if (typeof browser === 'undefined') {
-  thisBrowser = chrome;
-} else {
-  thisBrowser = browser;
-}
-
 // Provide help text to the user.
-thisBrowser.omnibox.setDefaultSuggestion({
+browser.omnibox.setDefaultSuggestion({
   description: `Open the corresponding opal service with the chosen environment (default live)
     (e.g. "inventory" | "archive develop")`
 });
 
 // Update the suggestions whenever the input is changed.
-thisBrowser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
+browser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
   let suggestions = [];
   let parts = text.split(' ');
   if (parts.length > 1) {
@@ -94,7 +87,7 @@ thisBrowser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
 });
 
 // Open the page based on how the user clicks on a suggestion.
-thisBrowser.omnibox.onInputEntered.addListener((text, disposition) => {
+browser.omnibox.onInputEntered.addListener((text, disposition) => {
   let url = text;
   if (!text.startsWith(PROTOCOL)) {
     let parts = text.split(' ');
@@ -114,13 +107,13 @@ thisBrowser.omnibox.onInputEntered.addListener((text, disposition) => {
 
   switch (disposition) {
     case "currentTab":
-      thisBrowser.tabs.update({ url });
+      browser.tabs.update({ url });
       break;
     case "newForegroundTab":
-      thisBrowser.tabs.create({ url });
+      browser.tabs.create({ url });
       break;
     case "newBackgroundTab":
-      thisBrowser.tabs.create({ url, active: false });
+      browser.tabs.create({ url, active: false });
       break;
   }
 });

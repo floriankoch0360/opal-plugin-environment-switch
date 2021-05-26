@@ -1,12 +1,11 @@
-let thisBrowser = null;
-if (typeof browser === 'undefined') {
-  thisBrowser = chrome;
-} else {
-  thisBrowser = browser;
+async function getCurrentTab() {
+  let queryOptions = { active: true, currentWindow: true };
+  let [tab] = await browser.tabs.query(queryOptions);
+  return tab;
 }
 
-function markCurrentEnvironment(tabs) {
-  let currentUrl = tabs[0].url;
+function markCurrentEnvironment(tab) {
+  let currentUrl = tab.url;
   let regex = /(?:https:\/\/[\w-_]+\.)([\w-_]+)(?:\.opal\.cloud\.otto\.de.*)/;
   let match = currentUrl.match(regex);
   if (match && match.length > 1) {
@@ -24,23 +23,19 @@ function markCurrentEnvironment(tabs) {
 
 document.addEventListener("click", (e) => {
 
-  function changeEnvironment(tabs) {
-    let currentUrl = tabs[0].url;
+  function changeEnvironment(tab) {
+    let currentUrl = tab.url;
     let targetEnv = e.target.textContent.toLowerCase();
     let regex = /(https:\/\/[\w-_]+\.)(?:[\w-_]+)(\.opal\.cloud\.otto\.de.*)/;
     let url = currentUrl.replace(regex, "$1" + targetEnv + "$2");
-    thisBrowser.tabs.update({ url });
+    browser.tabs.update({ url });
     window.close();
   }
 
   if (e.target.classList.contains("environment")) {
-    thisBrowser.tabs.query({ active: true, currentWindow: true }, function(result) {
-      changeEnvironment(result);
-    });
+    getCurrentTab().then(changeEnvironment, console.error);
   }
 
 });
 
-thisBrowser.tabs.query({ active: true, currentWindow: true }, function(result) {
-  markCurrentEnvironment(result);
-});
+getCurrentTab().then(markCurrentEnvironment, console.error);

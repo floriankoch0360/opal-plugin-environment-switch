@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "OPAL Environment Switch",
-  "version": "0.2",
+  "version": "0.3",
   "description": "Adds helpful features to navigate between OPAL services and their different environments (dev-ci, develop, live).",
   "icons": {
     "16": "icons/plugin_icon_colored_16.png",

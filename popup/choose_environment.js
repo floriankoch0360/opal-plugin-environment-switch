@@ -21,21 +21,28 @@ function markCurrentEnvironment(tab) {
   }
 }
 
-document.addEventListener("click", (e) => {
+function handleEnvironmentClick(e) {
 
   function changeEnvironment(tab) {
     let currentUrl = tab.url;
     let targetEnv = e.target.textContent.toLowerCase();
     let regex = /(https:\/\/[\w-_]+\.)(?:[\w-_]+)(\.opal\.cloud\.otto\.de.*)/;
     let url = currentUrl.replace(regex, "$1" + targetEnv + "$2");
-    browser.tabs.update({ url });
+    if (e.ctrlKey || e.button === 1) {
+      browser.tabs.create({ url });
+    } else {
+      browser.tabs.update({ url });
+    }
     window.close();
   }
 
-  if (e.target.classList.contains("environment")) {
+  // only on left and middle click
+  if (e.button <= 1  && e.target.classList.contains("environment")) {
     getCurrentTab().then(changeEnvironment, console.error);
   }
+}
 
-});
+document.addEventListener("click", handleEnvironmentClick);
+document.addEventListener("auxclick", handleEnvironmentClick);
 
 getCurrentTab().then(markCurrentEnvironment, console.error);

@@ -1,59 +1,5 @@
 const PROTOCOL = "https://";
 const BASE_URL = ".opal.cloud.otto.de/opal-";
-const ENVIRONMENTS = ["live", "develop", "develop-ci"];
-const KNOWN_SERVICES = [
-  "archive",
-  "association",
-  "attribute",
-  "availability",
-  "availability-partner",
-  "baseimage",
-  "benefit",
-  "brand",
-  "cashback",
-  "changes",
-  "content",
-  "customerreview",
-  "dashboard",
-  "dataflush",
-  "deal",
-  "environment",
-  "expertreview",
-  "gatekeeper",
-  "grafana",
-  "inventory",
-  "inventory-partner",
-  "jenkins",
-  "jobtrigger",
-  "media-image",
-  "media-image-partner",
-  "media-transfer",
-  "media-video",
-  "navigation",
-  "offer",
-  "offering",
-  "option",
-  "pegdown",
-  "permission",
-  "permission.wiki",
-  "prediction",
-  "pricing",
-  "product",
-  "product-mediatype",
-  "report",
-  "schema",
-  "search",
-  "search-refresh",
-  "shopping",
-  "statistics",
-  "status",
-  "survey",
-  "toolbox",
-  "txt-resolv",
-  "validation"
-];
-
-
 
 // Provide help text to the user.
 browser.omnibox.setDefaultSuggestion({
@@ -74,7 +20,7 @@ browser.omnibox.onInputChanged.addListener((text, addSuggestions) => {
   } else if (parts.length > 0) {
     let serviceStart = parts[0];
     let environment = ENVIRONMENTS[0];
-    KNOWN_SERVICES.forEach(service => {
+    services.forEach(service => {
       if (service.startsWith(serviceStart)) {
         suggestions.push(createSuggestion(service, environment));
       }
@@ -123,7 +69,7 @@ function buildServiceUrl(service, environment) {
 }
 
 function autocompleteService(start) {
-  let service = KNOWN_SERVICES.find(s => s.startsWith(start));
+  let service = services.find(s => s.startsWith(start));
   if (!service) {
     service = start;
   }

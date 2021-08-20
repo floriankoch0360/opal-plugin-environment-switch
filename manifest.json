@@ -1,18 +1,26 @@
 {
   "manifest_version": 2,
   "name": "OPAL Environment Switch",
-  "version": "0.3",
+  "version": "0.4",
   "description": "Adds helpful features to navigate between OPAL services and their different environments (dev-ci, develop, live).",
   "icons": {
     "16": "icons/plugin_icon_colored_16.png",
+    "32": "icons/plugin_icon_colored_32.png",
     "48": "icons/plugin_icon_colored_48.png",
-    "96": "icons/plugin_icon_colored_96.png"
+    "96": "icons/plugin_icon_colored_96.png",
+    "128": "icons/plugin_icon_colored_128.png"
   },
   "permissions": [
     "tabs",
     "activeTab",
-    "theme"
+    "storage"
   ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{cb0739e9-bf89-4852-af05-b1484ab76c40}",
+      "strict_min_version": "52.0"
+    }
+  },
   "page_action": {
     "browser_style": true,
     "default_icon": "icons/plugin_icon_colored_48.png",
@@ -25,10 +33,17 @@
   "background": {
     "scripts": [
       "scripts/browser-polyfill.min.js",
+      "scripts/defaults.js",
       "scripts/background.js"
     ]
   },
   "omnibox": {
     "keyword": "opal"
+  },
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": false,
+    "browser_style": true,
+    "chrome_style": true
   }
 }

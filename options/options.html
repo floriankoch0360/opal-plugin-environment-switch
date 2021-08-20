@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="browser_style.css"/> <!-- technically only needed for Chrome, but it doesn't hurt -->
+    <link rel="stylesheet" href="options.css"/>
+  </head>
+  <body>
+    <div class="panel">
+        <header class="panel-section panel-section-header">
+            <div class="icon-section-header">
+                <img src="../icons/plugin_icon_colored_32.png" />
+            </div>
+            <div class="text-section-header">General Settings</div>
+        </header>
+        <div class="panel-section panel-section-formElements">
+            <!--<div class="panel-formElements-item">
+                <label>Input 1 <input type="text" id="color" /></label>
+            </div>-->
+            <div class="panel-formElements-item">
+                <label for="services">Services</label>
+                <textarea id="services"></textarea>
+            </div>
+        </div>
+        <div class="panel-section panel-section-footer">
+            <div class="panel-section-footer-button" id="reset">Restore Defaults</div>
+        </div>   
+        <div class="panel-section panel-section-footer">
+            <div class="panel-section-footer-button" id="cancel">Cancel</div>
+            <div class="panel-section-footer-separator"></div>
+            <div class="panel-section-footer-button default" id="submit">Confirm</div>
+        </div>    
+    </div>
+    
+	<script src="../scripts/browser-polyfill.min.js"></script>
+    <script src="../scripts/defaults.js"></script>
+    <script src="options.js"></script>
+
+  </body>
+</html>
